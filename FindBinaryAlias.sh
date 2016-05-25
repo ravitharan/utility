@@ -1,6 +1,6 @@
 #!/bin/bash
-if [ $# == 0 ]; then
-  echo "Source path not specified"
+if ! [ -d ./binaries ]; then
+  echo "Need to run from ats root path, eg. ats/trunk"
   exit 1
 fi
 while read ALine
@@ -9,6 +9,6 @@ do
     echo ${ALine}
   else
     FileName=$( echo ${ALine} | sed "s:^.*/binaries/.*/\([^/]\+\)$:\1:g" )
-    find $1 -name ${FileName}
+    find ${PWD} -path ${PWD}/binaries -prune -o -name ${FileName} -print
   fi
 done
