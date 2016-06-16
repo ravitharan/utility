@@ -17,6 +17,7 @@
 :command! -nargs=1 SFileList call ArgFiles(<q-args>)
 :command! -nargs=0 CloseArgs call CloseArgFiles()
 :command! -nargs=0 RmBinaries call RemoveBinaries()
+:command! -nargs=0 GdbBtArrange call GdbBtRearrange()
 :nmap ,w :SFiles "<C-R><C-W>"<CR>
 :nmap ,W :SFiles "<C-R><C-A>"<CR>
 :nmap ,b :SBuffers "<C-R><C-W>"<CR>
@@ -36,6 +37,14 @@ function! RemoveBinaries()
   :exe '%s/^\x\{32\}  //g'
   :exe '%! sort -uV'
   :exe '%s/^\s*\_s//g'
+  :exe 'w'
+endfunction
+
+function! GdbBtRearrange()
+  :exe '%s/\n\(#\)\@!/\1/g'
+  :exe '%s/^#\d\+.\{-\}in //g'
+  :exe '%s/^\(.*\) at \(.*\)/\2: \1/g'
+  :exe '%! tac'
   :exe 'w'
 endfunction
 

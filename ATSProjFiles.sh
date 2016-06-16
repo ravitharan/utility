@@ -33,6 +33,7 @@ adt/adtpoolserver/
 adt/adtpool/
 adt/adtmakecoredump/
 adt/SpitfireDump/
+adt/adtmemory/
 bsp/libs/code/
 afwLib/code/
 afwLib/sf3/code/
