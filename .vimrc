@@ -22,7 +22,7 @@
 :nmap ,W :SFiles "<C-R><C-A>"<CR>
 :nmap ,b :SBuffers "<C-R><C-W>"<CR>
 :nmap ,B :SBuffers "<C-R><C-A>"<CR>
-:nmap ,n :let @*=line('.')<CR>
+:nmap ,n :let @*=expand("%:p").":".line('.').":\t".getline(".")<CR>
 :let buflist = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 :let vimcount = system("pgrep vim | wc -l")
 :let vimcount = vimcount - 1
@@ -257,3 +257,4 @@ endfunction
 if &diff
     colorscheme greens
 endif
+:set diffopt+=iwhite
