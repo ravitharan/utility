@@ -5,6 +5,7 @@
 :set mouse=a
 :set incsearch
 :set hlsearch
+:set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P
 :nmap qf :let @* = expand("%:t")<CR>
 :nmap qF :let @* = expand("%:p")<CR>
 :nmap qw :let @* = "<C-R><C-W>"<CR>
