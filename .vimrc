@@ -6,10 +6,11 @@
 :set incsearch
 :set hlsearch
 :set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P
-:nmap qf :let @* = expand("%:t")<CR>
-:nmap qF :let @* = expand("%:p")<CR>
-:nmap qw :let @* = "<C-R><C-W>"<CR>
-:nmap qW :let @* = "<C-R><C-A>"<CR>
+:nmap 1f :let @* = expand("%:t")<CR>
+:nmap 1F :let @* = expand("%:p")<CR>
+:nmap 1w :let @* = "<C-R><C-W>"<CR>
+:nmap 1W :let @* = "<C-R><C-A>"<CR>
+:nmap 1n :let @*=expand("%:p").":".line('.').":\t".getline(".")<CR>
 :let g:FileName = "files.txt"
 :command! -nargs=1 SFiles call SearchFiles(<q-args>)
 :command! -nargs=1 SBuffers call SearchBuffers(<q-args>)
@@ -19,11 +20,10 @@
 :command! -nargs=0 CloseArgs call CloseArgFiles()
 :command! -nargs=0 RmBinaries call RemoveBinaries()
 :command! -nargs=0 GdbBtArrange call GdbBtRearrange()
-:nmap ,w :SFiles "<C-R><C-W>"<CR>
-:nmap ,W :SFiles "<C-R><C-A>"<CR>
-:nmap ,b :SBuffers "<C-R><C-W>"<CR>
-:nmap ,B :SBuffers "<C-R><C-A>"<CR>
-:nmap ,n :let @*=expand("%:p").":".line('.').":\t".getline(".")<CR>
+:nmap 2w :SFiles "<C-R><C-W>"<CR>
+:nmap 2W :SFiles "<C-R><C-A>"<CR>
+:nmap 2b :SBuffers "<C-R><C-W>"<CR>
+:nmap 2B :SBuffers "<C-R><C-A>"<CR>
 :let buflist = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 :let vimcount = system("pgrep vim | wc -l")
 :let vimcount = vimcount - 1
@@ -259,3 +259,12 @@ if &diff
     colorscheme greens
 endif
 :set diffopt+=iwhite
+
+set wildmenu
+set wildmode=longest:list
+set wildignore+=*.o
+set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png
+set wildignore+=.DS_Store,.git,.hg,.svn
+set wildignore+=*.swp
+hi Search cterm=NONE ctermfg=White ctermbg=Blue
+
