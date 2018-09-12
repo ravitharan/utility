@@ -64,6 +64,8 @@ function! SearchBuffers(pattern )
     :exe "! grep -n \'".pattern."\' ".bl." > /tmp/S".g:Base.g:FileNo.""
   endif
   exe ":e /tmp/S".g:Base.g:FileNo.""
+  let b:search = pattern
+  let @/ = b:search
   let g:FileNo += 1
   if g:FileNo == 10
     let g:FileNo = 0
@@ -82,6 +84,8 @@ function! SearchFiles(pattern)
     exe ":! cat ".g:FileName." | xargs grep -n \'".pattern."\' > /tmp/S".g:Base.g:FileNo.""
   endif
   exe ":e /tmp/S".g:Base.g:FileNo.""
+  let b:search = pattern
+  let @/ = b:search
   let g:FileNo += 1
   if g:FileNo == 10
     let g:FileNo = 0
@@ -100,7 +104,7 @@ function! ArgFiles(pattern)
     exe ":! cat ".g:FileName." | xargs grep -l \'".pattern."\' > /tmp/Stemp"
   endif
   exe ":ar `cat /tmp/Stemp`"
-  exe "/".pattern.""
+  let @/ = pattern
 endfunction
 
 function! CloseArgFiles()
@@ -268,3 +272,11 @@ set wildignore+=.DS_Store,.git,.hg,.svn
 set wildignore+=*.swp
 hi Search cterm=NONE ctermfg=White ctermbg=Blue
 
+
+function! Restore_search()
+	if exists("b:search")
+	  let @/ = b:search
+	endif
+endfunction
+
+autocmd  BufEnter  /tmp/S[a-z][0-9]   : call Restore_search()
