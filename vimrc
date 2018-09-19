@@ -21,6 +21,7 @@
 :command! -nargs=0 RmBinaries call RemoveBinaries()
 :command! -nargs=0 GdbBtArrange call GdbBtRearrange()
 :command! -nargs=0 SParents call SearchParents()
+:command! -nargs=0 Ll call DispSearchOutput()
 :nmap 2w :SFiles "<C-R><C-W>"<CR>
 :nmap 2W :SFiles "<C-R><C-A>"<CR>
 :nmap 2b :SBuffers "<C-R><C-W>"<CR>
@@ -30,6 +31,7 @@
 :let vimcount = vimcount - 1
 let g:Base = buflist[vimcount]
 let g:FileNo = 0
+let g:SearchPatterns = {}
 
 function! RemoveBinaries()
   :exe '%! ~/Operate.sh md5sum'
@@ -79,17 +81,30 @@ function! SearchFiles(pattern)
   else
     let pattern = a:pattern
   endif
+  "Use the same search output file, if search pattern is same
+  let FileNo = g:FileNo
+  for [key, value] in items(g:SearchPatterns)
+    if pattern == value
+      let FileNo = key
+    endif
+  endfor
+
   if strpart(pattern, len(pattern)-2, 2) == "\\c"
-    exe ":! cat ".g:FileName." | xargs grep -in \'".strpart(pattern,0,len(pattern)-2)."\' > /tmp/S".g:Base.g:FileNo.""
+    exe ":! cat ".g:FileName." | xargs grep -in \'".strpart(pattern,0,len(pattern)-2)."\' > /tmp/S".g:Base.FileNo.""
   else
-    exe ":! cat ".g:FileName." | xargs grep -n \'".pattern."\' > /tmp/S".g:Base.g:FileNo.""
+    exe ":! cat ".g:FileName." | xargs grep -n \'".pattern."\' > /tmp/S".g:Base.FileNo.""
   endif
-  exe ":e /tmp/S".g:Base.g:FileNo.""
+  exe ":e /tmp/S".g:Base.FileNo.""
   let b:search = pattern
   let @/ = b:search
-  let g:FileNo += 1
-  if g:FileNo == 10
-    let g:FileNo = 0
+
+  if FileNo == g:FileNo
+  "New output file is used
+    let g:SearchPatterns[FileNo] = pattern
+    let g:FileNo += 1
+    if g:FileNo == 10
+      let g:FileNo = 0
+    endif
   endif
 endfunction
 
@@ -355,3 +370,10 @@ if g:FileNo == 10
 endif
 
 endfunction
+
+function! DispSearchOutput( )
+  for [key, value] in items(g:SearchPatterns)
+    echo "/tmp/S".g:Base.key." ".value
+  endfor
+endfunction
+
