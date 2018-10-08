@@ -21,7 +21,7 @@
 :command! -nargs=0 RmBinaries call RemoveBinaries()
 :command! -nargs=0 GdbBtArrange call GdbBtRearrange()
 :command! -nargs=0 SParents call SearchParents()
-:command! -nargs=0 Ll call DispSearchOutput()
+:command! -nargs=0 OpenSearchFile call OpenSearchFile()
 :nmap 2w :SFiles "<C-R><C-W>"<CR>
 :nmap 2W :SFiles "<C-R><C-A>"<CR>
 :nmap 2b :SBuffers "<C-R><C-W>"<CR>
@@ -371,9 +371,24 @@ endif
 
 endfunction
 
-function! DispSearchOutput( )
+function! OpenSearchFile( )
+  let FileLst = []
+  let SearchString = []
   for [key, value] in items(g:SearchPatterns)
-    echo "/tmp/S".g:Base.key." ".value
+    call add(FileLst, "/tmp/S".g:Base.key)
+    call add(SearchString, value)
   endfor
+  let nooffiles = len(FileLst)
+  if nooffiles == 1
+    exe ":e ".FileLst[0].""
+  elseif nooffiles > 1
+    let PromptLst = []
+    for i in range(len(FileLst))
+      call add(PromptLst, i." ".FileLst[i]." ".SearchString[i])
+    endfor
+    call insert(PromptLst, "Select a file:")
+    let index = -1
+    let index = inputlist(PromptLst)
+    exe ":e ".FileLst[index].""
+  endif
 endfunction
-
