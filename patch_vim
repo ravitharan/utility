@@ -1,0 +1,83 @@
+diff --git a/configure b/configure
+index 1d0c5b2..eeda3f7 100755
+--- a/configure
++++ b/configure
+@@ -3,4 +3,4 @@
+ # This is just a stub for the Unix configure script, to provide support for
+ # doing "./configure" in the top Vim directory.
+ 
+-cd src && exec ./configure "$@"
++cd src && exec ./configure --enable-python3interp CFLAGS="-g -O2 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1 -MD" -datarootdir=${PWD}/../.. "$@"
+diff --git a/src/normal.c b/src/normal.c
+index 41c7623..a9b1b0e 100644
+--- a/src/normal.c
++++ b/src/normal.c
+@@ -2328,6 +2328,7 @@ do_mouse(
+     int		old_active = VIsual_active;
+     int		old_mode = VIsual_mode;
+     int		regname;
++    int		i;
+ 
+ #if defined(FEAT_FOLDING)
+     save_cursor = curwin->w_cursor;
+@@ -2603,7 +2604,27 @@ do_mouse(
+ 		{
+ 		    /* Go to specified tab page, or next one if not clicking
+ 		     * on a label. */
++		    i = mouse_col ;
++		    while(i)
++		    {
++			if (TabPageIdxs[i] == 0 )
++			    break ;
++			i-- ;
++		    }
++#if 0
++		    FILE *flout = fopen("/tmp/vim.log","a") ;
++		    if (flout)
++		    {
++		      fprintf(flout, "line %d: mouse_col %d, c1 %d, IsTap %d\n", __LINE__, mouse_col, c1, (i == 0) ? 1 : 0) ;
++		      fclose(flout) ;
++		    }
++#endif
++		    if( i == 0 )
+ 		    goto_tabpage(c1);
++		    else
++		    {
++			do_buffer( DOBUF_GOTO, DOBUF_FIRST, FORWARD, c1, 0 ) ;
++		    }
+ 
+ 		    /* It's like clicking on the status line of a window. */
+ 		    if (curwin != old_curwin)
+@@ -2623,9 +2644,19 @@ do_mouse(
+ 		{
+ 		    if (first_tabpage->tp_next != NULL)
+ 			tabpage_close(FALSE);
++		  else
++		    do_buffer( DOBUF_DEL, DOBUF_CURRENT, FORWARD, 0, 0);
+ 		}
+ 		else if (tp != NULL)
+ 		    tabpage_close_other(tp, FALSE);
++#if 0
++		FILE *flout = fopen("/tmp/vim.log","a") ;
++		if (flout)
++		{
++		  fprintf(flout, "line %d: mouse_col %d, c1 %d, IsTap %d\n", __LINE__, mouse_col, c1, (i == 0) ? 1 : 0) ;
++		  fclose(flout) ;
++		}
++#endif
+ 	    }
+ 	}
+ 	return TRUE;
+diff --git a/src/term.c b/src/term.c
+index b2e2b03..763fc83 100644
+--- a/src/term.c
++++ b/src/term.c
+@@ -6009,6 +6009,8 @@ check_termcode(
+ #ifdef FEAT_TERMRESPONSE
+     LOG_TR(("normal character"));
+ #endif
++    if( mouse_col < 0 )
++      mouse_col += 256 ;
+ 
+     return 0;			    /* no match found */
+ }
