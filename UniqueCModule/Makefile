@@ -1,3 +1,3 @@
 
-CFLAGS = -g
+CFLAGS = -g -MD
 UniqueCModule : UniqueCModule.cpp

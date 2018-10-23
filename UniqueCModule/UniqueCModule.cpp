@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #define DEBUG  1
 
@@ -24,6 +25,10 @@ typedef VECTOR_MODULE::iterator VECTOR_MODULE_ITERATOR;
 
 const char HeaderFileName[] = "PrepPros_HeaderFile.h";
 
+bool CompareModule (const Module& module1, const Module& module2)
+{
+  return (module1.strModule.compare(module2.strModule) < 0);
+}
 
 int main(int argc, char* argv[])
 {
@@ -102,75 +107,75 @@ int main(int argc, char* argv[])
       strCrntLine.assign(Buffer);
       lineno++ ;
       if( strCrntLine.find_first_not_of(" \t") == string::npos) //remove blank lines
-	continue;
+        continue;
 
       strCrntLine += "\n" ;
 
       if( strCrntLine.at(0) == '#' )
       {
 #if ( DEBUG > 2 )
-	cout << "# " << lineno ;
+        cout << "# " << lineno ;
 #endif
-	if ( ! AModule.strModule.empty() )
-	{
+        if ( ! AModule.strModule.empty() )
+        {
 #if ( DEBUG > 2 )
-	  cout << " data from " << AModule.FileName ;
+          cout << " data from " << AModule.FileName ;
 #endif
-	  if ( AModule.FileName.find( strSrcFileName ) != string::npos )
-	  {
+          if ( AModule.FileName.find( strSrcFileName ) != string::npos )
+          {
 #if ( DEBUG > 1 )
-	    cout << " c contents " << endl ;
+            cout << " c contents " << endl ;
 #endif
-	    OutFile << AModule.strModule ;
-	    while( !InSrcFile.eof() )
-	    {
-	      InSrcFile.getline(Buffer, BUFFERSIZE-1);
-	      strCrntLine.assign(Buffer);
-	      lineno++ ;
-	      if( strCrntLine.find_first_not_of(" \t") == string::npos) //remove blank lines
-		continue;
-	      if( strCrntLine.at(0) == '#' )
-		continue;
-	      strCrntLine += "\n" ;
-	      OutFile << strCrntLine ;
-	    }
-	  }
-	  else
-	  {
+            OutFile << AModule.strModule ;
+            while( !InSrcFile.eof() )
+            {
+              InSrcFile.getline(Buffer, BUFFERSIZE-1);
+              strCrntLine.assign(Buffer);
+              lineno++ ;
+              if( strCrntLine.find_first_not_of(" \t") == string::npos) //remove blank lines
+                continue;
+              if( strCrntLine.at(0) == '#' )
+                continue;
+              strCrntLine += "\n" ;
+              OutFile << strCrntLine ;
+            }
+          }
+          else
+          {
 #if ( DEBUG > 1 )
-	    cout << " h contents " << endl ;
+            cout << " h contents " << endl ;
 #endif
-	    IsModuleInList = false;
-	    for(VECTOR_MODULE_ITERATOR it = vecOfModule.begin(); it != vecOfModule.end(); it++)
-	    {
+            IsModuleInList = false;
+            for(VECTOR_MODULE_ITERATOR it = vecOfModule.begin(); it != vecOfModule.end(); it++)
+            {
               if ( ( it->LineNo == AModule.LineNo ) && ( it->FileName == AModule.FileName ) && ( it->strModule == AModule.strModule ) )
-	      {
-		IsModuleInList = true;
-		break;
-	      }
-	    }
-	    if(IsModuleInList == false)
-	    {
-	      vecOfModule.push_back(AModule);
-	    }
-	  }
+              {
+                IsModuleInList = true;
+                break;
+              }
+            }
+            if(IsModuleInList == false)
+            {
+              vecOfModule.push_back(AModule);
+            }
+          }
           AModule.strModule.clear() ;
-	}
-	else
-	{
+        }
+        else
+        {
 #if ( DEBUG > 2 )
-	  cout << " empty " << endl ;
+          cout << " empty " << endl ;
 #endif
-	}
-	istringstream ins ( strCrntLine ) ;
-	ins >> str ;
-	ins >> AModule.LineNo ;
-	ins >> AModule.FileName ;
-	AModule.strModule.clear() ;
+        }
+        istringstream ins ( strCrntLine ) ;
+        ins >> str ;
+        ins >> AModule.LineNo ;
+        ins >> AModule.FileName ;
+        AModule.strModule.clear() ;
       }
       else
       {
-	AModule.strModule += strCrntLine ;
+        AModule.strModule += strCrntLine ;
       }
     }
 
@@ -179,7 +184,7 @@ int main(int argc, char* argv[])
       if ( AModule.FileName.find( strSrcFileName ) != string::npos )
       {
 #if ( DEBUG > 1 )
-	cout << strPPFileName << ": " << lineno << endl ;
+        cout << strPPFileName << ": " << lineno << endl ;
 #endif
         OutFile << AModule.strModule ;
       }
@@ -216,12 +221,12 @@ int main(int argc, char* argv[])
     vecOfModule.clear();
     return 0;
   }
-
+  sort(vecOfModule.begin(), vecOfModule.end(), CompareModule);
   for(VECTOR_MODULE_ITERATOR it = vecOfModule.begin(); it != vecOfModule.end(); it++)
   {
     OutFile << it->strModule;
   }
- 
+
   vecOfModule.clear();
 
   OutFile.close();
