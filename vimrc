@@ -324,17 +324,15 @@ def get_function(func_data_file, file_name, num):
 
     if (file_offset != 0):
       f.seek(file_offset)
-      last_fun = ""
-      last_num = 0
+      """Parent function is defined just above the requested line_num"""
       for i in range(num_lines):
         line = f.readline()
         file_data = line.split()
-        if (int(file_data[0]) > line_num):
-          if (last_fun != "") and (last_num != line_num):
-            func_name = last_fun
+        current_line_num = int(file_data[0])
+        if (current_line_num > line_num):
           break
-        last_fun = file_data[1]
-        last_num = int(file_data[0])
+        if (current_line_num != line_num):
+          func_name = file_data[1]
 
     f.closed
   return func_name
