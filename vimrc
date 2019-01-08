@@ -16,6 +16,7 @@
 :command! -nargs=1 SBuffers call SearchBuffers(<q-args>)
 :command! -nargs=1 Open call OpenFile(<q-args>)
 :command! -nargs=0 Ls call DispBuffers()
+:command! -nargs=0 Ds call DeleteBuffers()
 :command! -nargs=1 SFileList call ArgFiles(<q-args>)
 :command! -nargs=0 CloseArgs call CloseArgFiles()
 :command! -nargs=0 RmBinaries call RemoveBinaries()
@@ -389,4 +390,25 @@ function! OpenSearchFile( )
     let index = inputlist(PromptLst)
     exe ":e ".FileLst[index].""
   endif
+endfunction
+
+
+function! DeleteBuffers( )
+  for buf in getbufinfo({'buflisted':1})
+    let name = fnamemodify(buf.name, ":t")
+    echo buf.bufnr . " " . name
+  endfor
+  let files = input("Select files to close: ")
+
+"Use python for string to list with split()
+python3 << EOF
+import vim
+files = vim.eval('files').split()
+vim.command("let files = %s" % files)
+EOF
+
+  for i in files
+    :exe "b " . i
+    :exe "bd " . i
+  endfor
 endfunction
