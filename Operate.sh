@@ -3,10 +3,11 @@
 # Example usage within vim
 # %! Operate.sh ls 
 # %! Operate.sh find /usr/include/ -path "*/@@" 
-
 cmd=$*
 if ! echo ${cmd} | grep -q "@@" ; then
   cmd=${cmd}" @@"
 fi
 
-cat /dev/stdin | xargs -I@@ bash -c "${cmd}"
+CMD=$( echo "${cmd}" | sed 's/@@/\"@@\"/g' )
+
+xargs -I@@ bash -c "${CMD}"
