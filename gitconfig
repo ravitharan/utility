@@ -1,8 +1,8 @@
 [diff]
 	tool = vimdiff
 [user]
-	email = gravitharan@miurasystems.com
-	name = Ravi Ravitharan
+	email = ravitharan@gmail.com
+	name = G.Ravitharan
 [alias]
     # Show tags sorted by date
     tags = !"git for-each-ref \
