@@ -135,7 +135,8 @@ export EDITOR=vim
 NDK_ROOT=~/Android/Ndk/
 ANDROID_HOME=~/Android/Sdk/
 
-#/etc/bash_completion.d/git-prompt
+source /etc/bash_completion.d/git-prompt.sh
+source /etc/bash_completion.d/git-completion.bash
 export GIT_PS1_SHOWDIRTYSTATE=true
 PS1='\A \[\033[01;34m\]${PWD}\[\033[00m\]$(__git_ps1 " (%s)") \$ '
 Title=$( echo $PWD | sed 's|^.*\(/[^/]\+\)\(/[^/]\+\)\(/[^/]\+\)$|..\1\2\3|g' )

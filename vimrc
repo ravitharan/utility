@@ -6,11 +6,11 @@
 :set incsearch
 :set hlsearch
 :set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P
-:nmap 1f :let @* = expand("%:t")<CR>
-:nmap 1F :let @* = expand("%:p")<CR>
-:nmap 1w :let @* = "<C-R><C-W>"<CR>
-:nmap 1W :let @* = "<C-R><C-A>"<CR>
-:nmap 1n :let @*=expand("%:p").":".line('.').":\t".getline(".")<CR>
+:nmap 1f :let @+ = expand("%:t")<CR>
+:nmap 1F :let @+ = expand("%:p")<CR>
+:nmap 1w :let @+ = "<C-R><C-W>"<CR>
+:nmap 1W :let @+ = "<C-R><C-A>"<CR>
+:nmap 1n :let @+=expand("%:p").":".line('.').":\t".getline(".")<CR>
 :let g:FileName = "files.txt"
 :command! -nargs=1 SFiles call SearchFiles(<q-args>)
 :command! -nargs=1 SBuffers call SearchBuffers(<q-args>)
@@ -28,7 +28,7 @@
 :nmap 2b :SBuffers "<C-R><C-W>"<CR>
 :nmap 2B :SBuffers "<C-R><C-A>"<CR>
 :let buflist = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-:let vimcount = system("pgrep vim | wc -l")
+:let vimcount = system("ps | grep vim | wc -l")
 :let vimcount = vimcount - 1
 let g:Base = buflist[vimcount]
 let g:FileNo = 0
