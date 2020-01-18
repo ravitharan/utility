@@ -117,7 +117,7 @@ if ! shopt -oq posix; then
 fi
 
 export PATH=$PATH:${HOME}/utility
-export PAGER="${HOME}/software/vimpager/vimpager"
+export PAGER="${HOME}/Documents/software/vimpager/vimpager"
 alias androidStudio=/opt/android-studio/bin/studio.sh
 #export PATH=$PATH:/home/ravi/work/github/raspberrypi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
 #export PATH=$PATH:"/home/ravi/tmp/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin"

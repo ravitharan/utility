@@ -1,18 +1,18 @@
 diff --git a/configure b/configure
-index 1d0c5b2ec..15a1261a6 100755
+index d9d99c655..2168c6c17 100755
 --- a/configure
 +++ b/configure
 @@ -3,4 +3,4 @@
  # This is just a stub for the Unix configure script, to provide support for
  # doing "./configure" in the top Vim directory.
  
--cd src && exec ./configure "$@"
-+cd src && exec ./configure --enable-python3interp=yes "$@"
-diff --git a/src/normal.c b/src/normal.c
-index 06595e98c..e1754cc8b 100644
---- a/src/normal.c
-+++ b/src/normal.c
-@@ -2270,6 +2270,7 @@ do_mouse(
+-cd "${SRCDIR:-src}" && exec ./configure "$@"
++cd "${SRCDIR:-src}" && exec ./configure --enable-python3interp=yes CFLAGS="-g -MD -O2 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1" --datarootdir=${PWD}/../.. "$@"
+diff --git a/src/mouse.c b/src/mouse.c
+index c94f3228f..f25ef1499 100644
+--- a/src/mouse.c
++++ b/src/mouse.c
+@@ -228,6 +228,7 @@ do_mouse(
      int		old_active = VIsual_active;
      int		old_mode = VIsual_mode;
      int		regname;
@@ -20,10 +20,11 @@ index 06595e98c..e1754cc8b 100644
  
  #if defined(FEAT_FOLDING)
      save_cursor = curwin->w_cursor;
-@@ -2545,7 +2546,27 @@ do_mouse(
+@@ -484,7 +485,27 @@ do_mouse(
  		{
- 		    /* Go to specified tab page, or next one if not clicking
- 		     * on a label. */
+ 		    // Go to specified tab page, or next one if not clicking
+ 		    // on a label.
+-		    goto_tabpage(c1);
 +		    i = mouse_col ;
 +		    while(i)
 +		    {
@@ -35,25 +36,25 @@ index 06595e98c..e1754cc8b 100644
 +		    FILE *flout = fopen("/tmp/vim.log","a") ;
 +		    if (flout)
 +		    {
-+		      fprintf(flout, "line %d: mouse_col %d, c1 %d, IsTap %d\n", __LINE__, mouse_col, c1, (i == 0) ? 1 : 0) ;
-+		      fclose(flout) ;
++			fprintf(flout, "line %d: mouse_col %d, c1 %d, IsTap %d\n", __LINE__, mouse_col, c1, (i == 0) ? 1 : 0) ;
++			fclose(flout) ;
 +		    }
 +#endif
 +		    if( i == 0 )
- 		    goto_tabpage(c1);
++			goto_tabpage(c1);
 +		    else
 +		    {
 +			do_buffer( DOBUF_GOTO, DOBUF_FIRST, FORWARD, c1, 0 ) ;
 +		    }
  
- 		    /* It's like clicking on the status line of a window. */
+ 		    // It's like clicking on the status line of a window.
  		    if (curwin != old_curwin)
-@@ -2565,9 +2586,19 @@ do_mouse(
+@@ -504,9 +525,19 @@ do_mouse(
  		{
  		    if (first_tabpage->tp_next != NULL)
  			tabpage_close(FALSE);
-+		  else
-+		    do_buffer( DOBUF_DEL, DOBUF_CURRENT, FORWARD, 0, 0);
++		    else
++			do_buffer( DOBUF_DEL, DOBUF_CURRENT, FORWARD, 0, 0);
  		}
  		else if (tp != NULL)
  		    tabpage_close_other(tp, FALSE);
@@ -61,23 +62,10 @@ index 06595e98c..e1754cc8b 100644
 +		FILE *flout = fopen("/tmp/vim.log","a") ;
 +		if (flout)
 +		{
-+		  fprintf(flout, "line %d: mouse_col %d, c1 %d, IsTap %d\n", __LINE__, mouse_col, c1, (i == 0) ? 1 : 0) ;
-+		  fclose(flout) ;
++		    fprintf(flout, "line %d: mouse_col %d, c1 %d, IsTap %d\n", __LINE__, mouse_col, c1, (i == 0) ? 1 : 0) ;
++		    fclose(flout) ;
 +		}
 +#endif
  	    }
  	}
  	return TRUE;
-diff --git a/src/term.c b/src/term.c
-index 4a39fe3df..9471df166 100644
---- a/src/term.c
-+++ b/src/term.c
-@@ -6027,6 +6027,8 @@ check_termcode(
- #ifdef FEAT_TERMRESPONSE
-     LOG_TR(("normal character"));
- #endif
-+    if( mouse_col < 0 )
-+      mouse_col += 256 ;
- 
-     return 0;			    /* no match found */
- }
