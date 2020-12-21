@@ -27,6 +27,11 @@
 :nmap 2W :SFiles "<C-R><C-A>"<CR>
 :nmap 2b :SBuffers "<C-R><C-W>"<CR>
 :nmap 2B :SBuffers "<C-R><C-A>"<CR>
+
+:map <C-B> :py3f /usr/share/vim/addons/syntax/clang-format.py<cr>
+:imap <C-B> <c-o>:py3f /usr/share/vim/addons/syntax/clang-format.py<cr>
+:autocmd FileType python set equalprg=yapf
+
 :let buflist = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 :let vimcount = system("ps | grep vim | wc -l")
 :let vimcount = vimcount - 1
