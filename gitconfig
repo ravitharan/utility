@@ -1,21 +1,15 @@
 [diff]
 	tool = vimdiff
-[user]
-	email = ravitharan@gmail.com
-	name = G.Ravitharan
+
+[merge]
+	tool = vimdiff
+
 [alias]
     # Show tags sorted by date
     tags = !"git for-each-ref \
         --sort=taggerdate \
         --format '%(tag)_,,,_%(taggerdate:raw)_,,,_%(taggername)_,,,_%(subject)' refs/tags \
         | awk 'BEGIN { FS = \"_,,,_\"  } ; { t=strftime(\"%Y-%m-%d  %H:%M\",$2); printf \"%-20s %-18s %-25s %s\\n\", t, $1, $4, $3  }'"
-[sendemail]
-  ; setup for using git send-email; prompts for password
-  smtpuser = gravitharan@miurasystems.com
-  smtpserver = smtp.googlemail.com
-  smtpencryption = tls
-  smtpserverport = 587
 
-
-[merge]
-	tool = vimdiff
+    # Show one line git log
+    logs = !"git log --pretty=format:\"%C(yellow)%h %Cblue%>(12)%ad %Cgreen%<(16)%aN%Cred%d %Creset%s\" --date=short"
