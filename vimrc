@@ -1,16 +1,20 @@
 :syntax on
-:set tabstop=2
-:set shiftwidth=2
+:set tabstop=4
+:set shiftwidth=4
 :set expandtab
 :set mouse=a
 :set incsearch
 :set hlsearch
 :set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P
-:nmap 1f :let @+ = expand("%:t")<CR>
-:nmap 1F :let @+ = expand("%:p")<CR>
-:nmap 1w :let @+ = "<C-R><C-W>"<CR>
-:nmap 1W :let @+ = "<C-R><C-A>"<CR>
-:nmap 1n :let @+=expand("%:p").":".line('.').":\t".getline(".")<CR>
+:set autoread
+
+runtime! ftplugin/man.vim
+
+:nmap 1f :let @* = expand("%:t")<CR>
+:nmap 1F :let @* = expand("%:p")<CR>
+:nmap 1w :let @* = "<C-R><C-W>"<CR>
+:nmap 1W :let @* = "<C-R><C-A>"<CR>
+:nmap 1n :let @*=expand("%:p").":".line('.').":\t".getline(".")<CR>
 :let g:FileName = "files.txt"
 :command! -nargs=1 SFiles call SearchFiles(<q-args>)
 :command! -nargs=1 SBuffers call SearchBuffers(<q-args>)
@@ -19,7 +23,6 @@
 :command! -nargs=0 Ds call DeleteBuffers()
 :command! -nargs=1 SFileList call ArgFiles(<q-args>)
 :command! -nargs=0 CloseArgs call CloseArgFiles()
-:command! -nargs=0 RmBinaries call RemoveBinaries()
 :command! -nargs=0 GdbBtArrange call GdbBtRearrange()
 :command! -nargs=0 SParents call SearchParents()
 :command! -nargs=0 OpenSearchFile call OpenSearchFile()
@@ -38,17 +41,6 @@
 let g:Base = buflist[vimcount]
 let g:FileNo = 0
 let g:SearchPatterns = {}
-
-function! RemoveBinaries()
-  :exe '%! ~/Operate.sh md5sum'
-  :exe '%! sort -uV'
-  :exe '%s/^\(\x\{32\}  \)\(.*\_s\)\1.*binaries.*\_s/\1\2/g'
-  :exe '%s/^\(\x\{32\}  \).*binaries.*\_s\1\(.*\_s\)/\1\2/g'
-  :exe '%s/^\x\{32\}  //g'
-  :exe '%! sort -uV'
-  :exe '%s/^\s*\_s//g'
-  :exe 'w'
-endfunction
 
 function! GdbBtRearrange()
   :exe '%s/\n\(#\)\@!/\1/g'
@@ -417,3 +409,4 @@ EOF
     :exe "bd " . i
   endfor
 endfunction
+
