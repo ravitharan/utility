@@ -1,4 +1,4 @@
-export PATH=$PATH:${HOME}/utility
+export PATH=$PATH:${HOME}/utility:${HOME}/.local/bin
 alias V=V.sh
 
 set -o vi
