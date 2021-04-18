@@ -1,15 +1,18 @@
 diff --git a/configure b/configure
-index d9d99c655..2168c6c17 100755
+index d9d99c655..0f07037ca 100755
 --- a/configure
 +++ b/configure
-@@ -3,4 +3,4 @@
+@@ -3,4 +3,7 @@
  # This is just a stub for the Unix configure script, to provide support for
  # doing "./configure" in the top Vim directory.
  
 -cd "${SRCDIR:-src}" && exec ./configure "$@"
-+cd "${SRCDIR:-src}" && exec ./configure --enable-python3interp=yes CFLAGS="-g -MD -O2 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1" --datarootdir=${PWD}/../.. "$@"
++# libncurses5-dev libgtk3.0-dev libatk1.0-dev libcairo2-dev libx11-dev libxpm-dev libxt-dev python3-dev ruby-dev lua5.2 liblua5.2-dev libperl-dev
++
++
++cd "${SRCDIR:-src}" && exec ./configure --with-features=huge --enable-multibyte --enable-python3interp=yes --with-python3-config-dir=$(python3-config --configdir) --enable-perlinterp=yes --enable-luainterp=yes --enable-gui=gtk3 --enable-cscope --datarootdir=${PWD}/../.. "$@"
 diff --git a/src/mouse.c b/src/mouse.c
-index c94f3228f..f25ef1499 100644
+index 4bff48e76..f13e34e1a 100644
 --- a/src/mouse.c
 +++ b/src/mouse.c
 @@ -228,6 +228,7 @@ do_mouse(
@@ -20,7 +23,7 @@ index c94f3228f..f25ef1499 100644
  
  #if defined(FEAT_FOLDING)
      save_cursor = curwin->w_cursor;
-@@ -484,7 +485,27 @@ do_mouse(
+@@ -485,7 +486,27 @@ do_mouse(
  		{
  		    // Go to specified tab page, or next one if not clicking
  		    // on a label.
@@ -49,7 +52,7 @@ index c94f3228f..f25ef1499 100644
  
  		    // It's like clicking on the status line of a window.
  		    if (curwin != old_curwin)
-@@ -504,9 +525,19 @@ do_mouse(
+@@ -505,9 +526,19 @@ do_mouse(
  		{
  		    if (first_tabpage->tp_next != NULL)
  			tabpage_close(FALSE);
