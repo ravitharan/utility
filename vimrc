@@ -34,6 +34,7 @@ runtime! ftplugin/man.vim
 :map <C-B> :py3f /usr/share/vim/addons/syntax/clang-format.py<cr>
 :imap <C-B> <c-o>:py3f /usr/share/vim/addons/syntax/clang-format.py<cr>
 :autocmd FileType python set equalprg=yapf
+:vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
 :let buflist = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 :let vimcount = system("ps | grep vim | wc -l")
