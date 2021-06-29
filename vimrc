@@ -10,11 +10,11 @@
 
 runtime! ftplugin/man.vim
 
-:nmap 1f :let @* = expand("%:t")<CR>
-:nmap 1F :let @* = expand("%:p")<CR>
-:nmap 1w :let @* = "<C-R><C-W>"<CR>
-:nmap 1W :let @* = "<C-R><C-A>"<CR>
-:nmap 1n :let @*=expand("%:p").":".line('.').":\t".getline(".")<CR>
+:nnoremap ,f :let @* = expand("%:t")<CR>
+:nnoremap ,F :let @* = expand("%:p")<CR>
+:nnoremap ,w :let @* = "<C-R><C-W>"<CR>
+:nnoremap ,W :let @* = "<C-R><C-A>"<CR>
+:nnoremap <leader>n :let @*=expand("%:p").":".line('.').":\t".getline(".")<CR>
 :let g:FileName = "files.txt"
 :command! -nargs=1 SFiles call SearchFiles(<q-args>)
 :command! -nargs=1 SBuffers call SearchBuffers(<q-args>)
@@ -26,15 +26,16 @@ runtime! ftplugin/man.vim
 :command! -nargs=0 GdbBtArrange call GdbBtRearrange()
 :command! -nargs=0 SParents call SearchParents()
 :command! -nargs=0 OpenSearchFile call OpenSearchFile()
-:nmap 2w :SFiles "<C-R><C-W>"<CR>
-:nmap 2W :SFiles "<C-R><C-A>"<CR>
-:nmap 2b :SBuffers "<C-R><C-W>"<CR>
-:nmap 2B :SBuffers "<C-R><C-A>"<CR>
+:nnoremap <leader>w :SFiles "<C-R><C-W>"<CR>
+:nnoremap <leader>W :SFiles "<C-R><C-A>"<CR>
+:nnoremap <leader>b :SBuffers "<C-R><C-W>"<CR>
+:nnoremap <leader>B :SBuffers "<C-R><C-A>"<CR>
 
 :map <C-B> :py3f /usr/share/vim/addons/syntax/clang-format.py<cr>
 :imap <C-B> <c-o>:py3f /usr/share/vim/addons/syntax/clang-format.py<cr>
 :autocmd FileType python set equalprg=yapf
 :vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+:nnoremap <leader>K :Man <C-R><C-W><CR>
 
 :let buflist = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 :let vimcount = system("ps | grep vim | wc -l")
