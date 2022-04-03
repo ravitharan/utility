@@ -90,9 +90,9 @@ function! SearchFiles(pattern)
   endfor
 
   if strpart(pattern, len(pattern)-2, 2) == "\\c"
-    exe ":! cat ".g:FileName." | xargs grep -in \'".strpart(pattern,0,len(pattern)-2)."\' > /tmp/S".g:Base.FileNo.""
+    exe ":! cat ".g:FileName." | xargs grep -P -in \'".strpart(pattern,0,len(pattern)-2)."\' > /tmp/S".g:Base.FileNo.""
   else
-    exe ":! cat ".g:FileName." | xargs grep -n \'".pattern."\' > /tmp/S".g:Base.FileNo.""
+    exe ":! cat ".g:FileName." | xargs grep -P -n \'".pattern."\' > /tmp/S".g:Base.FileNo.""
   endif
   exe ":e /tmp/S".g:Base.FileNo.""
   let b:search = pattern
