@@ -12,4 +12,4 @@
         | awk 'BEGIN { FS = \"_,,,_\"  } ; { t=strftime(\"%Y-%m-%d  %H:%M\",$2); printf \"%-20s %-18s %-25s %s\\n\", t, $1, $4, $3  }'"
 
     # Show one line git log
-    logs = !"git log --pretty=format:\"%C(yellow)%h %Cblue%>(12)%ad %Cgreen%<(16)%aN%Cred%d %Creset%s\" --date=short"
+    logs = !"git log --graph --pretty=format:\"%C(yellow)%h %Cblue%>(12)%ad %Cgreen%<(16)%aN%Cred%d %Creset%s\" --date=short"
