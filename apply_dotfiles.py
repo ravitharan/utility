@@ -6,7 +6,7 @@ import subprocess
 
 utility_gitconfig = os.path.join(os.path.expanduser("~"), "utility", "gitconfig")
 
-link_dotfiles = [ "vimrc", "inputrc", "screenrc" ]
+link_dotfiles = [ "vimrc", "inputrc", "screenrc", "tmux.conf" ]
 
 include_dotfile = [ "gitconfig", "bashrc" ]
 
