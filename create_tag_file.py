@@ -70,7 +70,7 @@ def tag_to_func(tag_file, list_fun_list, all_tags_flag):
     else: # Only functions 
       for line in f:
         elements = line.strip().split('\t')
-        if (len(elements) >= 4) and elements[3] is 'f':
+        if (len(elements) >= 4) and (elements[3] == 'f'):
           elements[2] = elements[2][:-2]
           update_list(list_fun_list, elements[1], elements[2], elements[0])
  

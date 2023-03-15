@@ -275,9 +275,9 @@ endfunction
 :set showtabline=2
 :set laststatus=2
 
-if &diff
-    colorscheme greens
-endif
+" if &diff
+"     colorscheme greens
+" endif
 :set diffopt+=iwhite
 
 set wildmenu

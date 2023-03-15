@@ -11,6 +11,9 @@ PS1='\A \[\033[01;34m\]${PWD}\[\033[00m\]$(__git_ps1 " (%s)") \$ '
 Title=$( echo $PWD | sed 's|^.*\(/[^/]\+\)\(/[^/]\+\)\(/[^/]\+\)$|..\1\2\3|g' )
 PROMPT_COMMAND='echo -ne "\033]0;${Title}\007"'
 
-if ! [ -f /home/ravi/.local/bin/python ]; then
-    ln -s /usr/bin/python3 ${HOME}/.local/bin/python
+
+if ! which python > /dev/null 2>&1; then
+    if which python3 > /dev/null 2>&1; then
+        alias python=python3
+    fi
 fi
