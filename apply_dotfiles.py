@@ -4,7 +4,8 @@ import os
 import sys
 import subprocess
 
-utility_gitconfig = os.path.join(os.path.expanduser("~"), "utility", "gitconfig")
+home_path = os.path.expanduser('~')
+utility_gitconfig = os.path.join(home_path, "utility", "gitconfig")
 
 link_dotfiles = [ "vimrc", "inputrc", "screenrc", "tmux.conf" ]
 
@@ -40,7 +41,7 @@ def issue_command(command):
         return (True, cp.stdout)
 
 def utility_dot_included(dotfile):
-    dst = os.path.join(os.path.expanduser('~'), '.' + dotfile)
+    dst = os.path.join(home_path, '.' + dotfile)
     included = False
     try:
         with open(dst, "r") as file_in:
@@ -63,15 +64,17 @@ if __name__ == "__main__":
 
 
     for dotfile in link_dotfiles:
-        dst = os.path.join(os.path.expanduser('~'), '.' + dotfile)
+        dst = os.path.join(home_path, '.' + dotfile)
         if not os.path.isfile(dst):
-            issue_command(['ln', '-s', f'~/utility/{dotfile}', dst])
+            command = ['ln', '-s', f'{home_path}/utility/{dotfile}', dst]
+            print(' '.join(command))
+            issue_command(command)
         else:
             print(f"file {dst} already exist")
 
 
     for i in range(len(include_dotfile)):
-        dst = os.path.join(os.path.expanduser('~'), '.' + include_dotfile[i])
+        dst = os.path.join(home_path, '.' + include_dotfile[i])
         if not utility_dot_included(include_dotfile[i]):
             with open(dst, "a") as file_in:
                 file_in.write(include_message[i])

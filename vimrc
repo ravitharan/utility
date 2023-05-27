@@ -31,8 +31,6 @@ runtime! ftplugin/man.vim
 :nnoremap <leader>b :SBuffers "<C-R><C-W>"<CR>
 :nnoremap <leader>B :SBuffers "<C-R><C-A>"<CR>
 
-:map <C-B> :py3f /usr/share/vim/addons/syntax/clang-format.py<cr>
-:imap <C-B> <c-o>:py3f /usr/share/vim/addons/syntax/clang-format.py<cr>
 :autocmd FileType python set equalprg=yapf
 :vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 :nnoremap <leader>K :Man <C-R><C-W><CR>
@@ -275,9 +273,6 @@ endfunction
 :set showtabline=2
 :set laststatus=2
 
-" if &diff
-"     colorscheme greens
-" endif
 :set diffopt+=iwhite
 
 set wildmenu
