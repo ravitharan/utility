@@ -2,6 +2,15 @@
 :set tabstop=4
 :set shiftwidth=4
 :set expandtab
+
+" for python file 4 spaces
+autocmd Filetype python setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd Filetype vhdl setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd FileType python setlocal equalprg=yapf
+autocmd FileType gitcommit setlocal spell
+autocmd FileType gitcommit setlocal tw=72
+
+
 :set mouse=a
 :set incsearch
 :set hlsearch
@@ -33,7 +42,6 @@ runtime! ftplugin/man.vim
 
 :map <C-B> :py3f /usr/share/vim/addons/syntax/clang-format.py<cr>
 :imap <C-B> <c-o>:py3f /usr/share/vim/addons/syntax/clang-format.py<cr>
-:autocmd FileType python set equalprg=yapf
 :vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 :nnoremap <leader>K :Man <C-R><C-W><CR>
 
@@ -275,9 +283,9 @@ endfunction
 :set showtabline=2
 :set laststatus=2
 
-" if &diff
-"     colorscheme greens
-" endif
+if &diff
+    colorscheme pablo
+endif
 :set diffopt+=iwhite
 
 set wildmenu
@@ -412,3 +420,10 @@ EOF
   endfor
 endfunction
 
+:set number
+
+:augroup numbertoggle
+:  autocmd!
+:  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
+:  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
+:augroup END

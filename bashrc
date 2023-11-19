@@ -17,3 +17,6 @@ if ! which python > /dev/null 2>&1; then
         alias python=python3
     fi
 fi
+
+alias ci='win32yank.exe -i'
+alias co='win32yank.exe -o'
