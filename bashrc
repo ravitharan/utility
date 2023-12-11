@@ -20,3 +20,4 @@ fi
 
 alias ci='win32yank.exe -i'
 alias co='win32yank.exe -o'
+alias py='PYTHONPATH=${HOME}/utility python'
