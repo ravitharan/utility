@@ -17,3 +17,4 @@ if ! which python > /dev/null 2>&1; then
 fi
 
 alias vimdiff="vim -d"
+export PYTHONPATH=${HOME}/utility
