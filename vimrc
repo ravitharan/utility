@@ -407,3 +407,10 @@ EOF
   endfor
 endfunction
 
+function! Formatonsave()
+  let l:formatdiff = 1
+  echo "CLANG FORMAT"
+  py3f /usr/share/vim/addons/syntax/clang-format.py
+endfunction
+
+autocmd BufWritePre FileType c call Formatonsave()
