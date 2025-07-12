@@ -105,7 +105,7 @@ def main():
   tag_file = project_file.replace("files_", "tags_").replace(".txt", "")
   #Run ctags
   print("Creating tags...")
-  subprocess.check_call(['ctags', '-n', '-L', project_file, '-f', tag_file])
+  subprocess.check_call(f'ctags --map-Verilog=+.vh -n -L {project_file} -f {tag_file}'.split())
   list_fun_list = []
 
   print("Organizing tags...")
