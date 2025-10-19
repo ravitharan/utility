@@ -1,21 +1,30 @@
+From 0fd7ad364f480b0de00007f309dd9b4a11dd14d8 Mon Sep 17 00:00:00 2001
+From: Ravi G Ravitharan <ravitharan@gmail.com>
+Date: Sun, 19 Oct 2025 11:47:34 +0100
+Subject: [PATCH] Select buffer with mouse
+
+---
+ configure   |  4 +++-
+ src/mouse.c | 32 +++++++++++++++++++++++++++++++-
+ 2 files changed, 34 insertions(+), 2 deletions(-)
+
 diff --git a/configure b/configure
-index d9d99c655..0f07037ca 100755
+index d9d99c655..520dd7f1d 100755
 --- a/configure
 +++ b/configure
-@@ -3,4 +3,7 @@
+@@ -3,4 +3,6 @@
  # This is just a stub for the Unix configure script, to provide support for
  # doing "./configure" in the top Vim directory.
  
 -cd "${SRCDIR:-src}" && exec ./configure "$@"
 +# libncurses5-dev libgtk3.0-dev libatk1.0-dev libcairo2-dev libx11-dev libxpm-dev libxt-dev python3-dev ruby-dev lua5.2 liblua5.2-dev libperl-dev
 +
-+
-+cd "${SRCDIR:-src}" && exec ./configure --with-features=huge --enable-multibyte --enable-python3interp=yes --with-python3-config-dir=$(python3-config --configdir) --enable-perlinterp=yes --enable-luainterp=yes --enable-gui=gtk3 --enable-cscope --datarootdir=${PWD}/../.. "$@"
++cd "${SRCDIR:-src}" && exec ./configure --prefix="/opt/vim" --with-features=huge --enable-multibyte --enable-python3interp=yes --with-python3-config-dir=$(python3-config --configdir) --enable-perlinterp=yes --enable-luainterp=yes --enable-gui=gtk3 --enable-cscope --datarootdir=${PWD}/../.. "$@"
 diff --git a/src/mouse.c b/src/mouse.c
-index 4bff48e76..f13e34e1a 100644
+index d73e831d3..b92777156 100644
 --- a/src/mouse.c
 +++ b/src/mouse.c
-@@ -228,6 +228,7 @@ do_mouse(
+@@ -246,6 +246,7 @@ do_mouse(
      int		old_active = VIsual_active;
      int		old_mode = VIsual_mode;
      int		regname;
@@ -23,17 +32,17 @@ index 4bff48e76..f13e34e1a 100644
  
  #if defined(FEAT_FOLDING)
      save_cursor = curwin->w_cursor;
-@@ -485,7 +486,27 @@ do_mouse(
+@@ -543,7 +544,26 @@ do_mouse(
  		{
  		    // Go to specified tab page, or next one if not clicking
  		    // on a label.
 -		    goto_tabpage(c1);
 +		    i = mouse_col ;
-+		    while(i)
++		    while (i)
 +		    {
-+			if (TabPageIdxs[i] == 0 )
-+			    break ;
-+			i-- ;
++			if (TabPageIdxs[i] == 0)
++			    break;
++			i--;
 +		    }
 +#if 0
 +		    FILE *flout = fopen("/tmp/vim.log","a") ;
@@ -43,21 +52,20 @@ index 4bff48e76..f13e34e1a 100644
 +			fclose(flout) ;
 +		    }
 +#endif
-+		    if( i == 0 )
++		    if (i == 0) {
 +			goto_tabpage(c1);
-+		    else
-+		    {
-+			do_buffer( DOBUF_GOTO, DOBUF_FIRST, FORWARD, c1, 0 ) ;
++		    } else {
++			do_buffer(DOBUF_GOTO, DOBUF_FIRST, FORWARD, c1, 0);
 +		    }
  
  		    // It's like clicking on the status line of a window.
  		    if (curwin != old_curwin)
-@@ -505,9 +526,19 @@ do_mouse(
+@@ -563,9 +583,19 @@ do_mouse(
  		{
  		    if (first_tabpage->tp_next != NULL)
  			tabpage_close(FALSE);
 +		    else
-+			do_buffer( DOBUF_DEL, DOBUF_CURRENT, FORWARD, 0, 0);
++			do_buffer(DOBUF_DEL, DOBUF_CURRENT, FORWARD, 0, 0);
  		}
  		else if (tp != NULL)
  		    tabpage_close_other(tp, FALSE);
@@ -72,3 +80,6 @@ index 4bff48e76..f13e34e1a 100644
  	    }
  	}
  	return TRUE;
+-- 
+2.34.1
+
